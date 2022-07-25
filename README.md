@@ -2,14 +2,15 @@
 
 ## Introduction
 
-This is the implementation for our paper Domain Adaptive Person Search (DAPS) in ECCV2022. The code is  based on the official code of [SeqNet](https://github.com/serend1p1ty/SeqNet) and [SPCL](https://github.com/yxgeee/SpCL).
+This is the official implementation for our paper Domain Adaptive Person Search (DAPS) in ECCV2022. The code is  based on the official code of [SeqNet](https://github.com/serend1p1ty/SeqNet) and [SPCL](https://github.com/yxgeee/SpCL).
 
 Performance :
+we tried some hyper-parameters and got better ReID performance reported in our paper.
 
-|  Source   |  Target   | mAP  | Top-1 |    CKPT     |
-| :-------: | :-------: | :--: | :---: | :---------: |
-|    PRW    | CUHK-SYSU | 77.6 | 79.6  | coming soon |
-| CUHK-SYSU |    PRW    | 34.7 | 80.6  | coming soon |
+|  Source   |  Target   | mAP  | Top-1 |                             CKPT                             |                             log                              |
+| :-------: | :-------: | :--: | :---: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|    PRW    | CUHK-SYSU | 78.5 | 80.7  | [ckpt](https://drive.google.com/file/d/1VFGiIqGI2SiJ98uIOnGLSqploWLX5AS_/view?usp=sharing) | [train_log](https://drive.google.com/file/d/1f-vGsN_wK08xUZF7R_thEfG18haOj-t6/view?usp=sharing) |
+| CUHK-SYSU |    PRW    | 35.3 | 80.2  | [ckpt](https://drive.google.com/file/d/18eSJE3ljFl3SDf2H34PWVhFLmFhij3Rl/view?usp=sharing) | [train_log](https://drive.google.com/file/d/1DMPEqOu5pX2YLFRUFqQKNdAmA1YZDhqv/view?usp=sharing) |
 
 ![framework](doc/framework.png)
 
