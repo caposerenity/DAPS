@@ -92,7 +92,7 @@ class SeqNetDa(nn.Module):
         # here modified, for adapting to amp
         self.roi_heads.box_roi_pool.forward = amp.half_function(self.roi_heads.box_roi_pool.forward)
         self.transform = transform
-        self.da_heads = DomainAdaptationModule()
+        self.da_heads = DomainAdaptationModule(cfg.SOLVER.LW_DA_INS)
 
         # loss weights
         self.lw_rpn_reg = cfg.SOLVER.LW_RPN_REG
@@ -102,6 +102,7 @@ class SeqNetDa(nn.Module):
         self.lw_box_reg = cfg.SOLVER.LW_BOX_REG
         self.lw_box_cls = cfg.SOLVER.LW_BOX_CLS
         self.lw_box_reid = cfg.SOLVER.LW_BOX_REID
+        self.lw_box_reid_t = cfg.SOLVER.LW_BOX_REID_T
 
     #The is_source here should be switched when inferencing
     def inference(self, images, targets=None, query_img_as_gallery=False, is_source=False):
@@ -170,9 +171,9 @@ class SeqNetDa(nn.Module):
             losses["loss_proposal_cls_t"] *= (0.1*self.lw_proposal_cls)
             losses["loss_box_reg_t"] *= (0.1*self.lw_box_reg)
             losses["loss_box_cls_t"] *= (0.1*self.lw_box_cls)
-            losses["loss_box_reid_t"] *= (0.5*self.lw_box_reid)
+            losses["loss_box_reid_t"] *= self.lw_box_reid_t
             
-        da_ins_feas_t, da_ins_labels_t, da_ins_feas_t_before, da_ins_labels_t_before = self.roi_heads.extract_da(features_t, proposals_t, images_t.image_sizes, targets_t, is_source=False)
+        da_ins_feas_t, da_ins_labels_t, da_ins_feas_t_before, da_ins_labels_t_before = self.roi_heads.extract_da(features_t, proposals_t, images_t.image_sizes, targets_t)
         da_ins_labels_t = torch.cat(da_ins_labels_t)
         da_ins_labels_t_before = torch.cat(da_ins_labels_t_before)
         if self.da_heads:

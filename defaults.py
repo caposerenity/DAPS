@@ -62,6 +62,8 @@ _C.SOLVER.LW_BOX_REG = 1
 _C.SOLVER.LW_BOX_CLS = 1
 # Loss weight of box OIM (i.e. Online Instance Matching)
 _C.SOLVER.LW_BOX_REID = 1
+_C.SOLVER.LW_BOX_REID_T = 0.1
+_C.SOLVER.LW_DA_INS = 0.02
 
 # Set to negative value to disable gradient clipping
 _C.SOLVER.CLIP_GRADIENTS = 10.0
@@ -149,6 +151,8 @@ _C.SEED = 1
 _C.OUTPUT_DIR = "/dockerdata/tjunjieli/data/project_data/SeqNet-DA"
 
 _C.TARGET_REID_START = 0
+
+_C.HM_THRESH = 0.5
 
 _C.LOCAL_RANK = -1
 

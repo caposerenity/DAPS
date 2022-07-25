@@ -99,7 +99,7 @@ class DomainAdaptationModule(torch.nn.Module):
     feature vectors, domain labels and proposals. Works for both FPN and non-FPN.
     """
 
-    def __init__(self):
+    def __init__(self, lw_da_ins):
         super(DomainAdaptationModule, self).__init__()
 
         # self.cfg = cfg.clone()
@@ -124,6 +124,7 @@ class DomainAdaptationModule(torch.nn.Module):
         self.grl_ins_consist_before = GradientScalarLayer(1.0*0.1)
         
         in_channels = 256 * 4 #cfg.MODEL.BACKBONE.OUT_CHANNELS
+        self.lw_da_ins = lw_da_ins
 
         self.imghead = DAImgHead(1024)
         self.inshead = DAInsHead(256)
@@ -177,10 +178,10 @@ class DomainAdaptationModule(torch.nn.Module):
             if self.img_weight > 0:
                 losses["loss_da_image"] = self.img_weight * da_img_loss
             if self.ins_weight > 0:
-                losses["loss_da_instance"] = self.ins_weight * (0.98*da_ins_loss+0.02*da_ins_loss_before)
+                losses["loss_da_instance"] = self.ins_weight * (self.lw_da_ins*da_ins_loss+(1.0-self.lw_da_ins)*da_ins_loss_before)
                 #losses["loss_da_instance"] = self.ins_weight * da_ins_loss_before
             if self.cst_weight > 0:
-                losses["loss_da_consistency"] = self.cst_weight * (0.98*da_consistency_loss+0.02*da_consistency_loss_before)
+                losses["loss_da_consistency"] = self.cst_weight * (self.lw_da_ins*da_consistency_loss+(1.0-self.lw_da_ins)*da_consistency_loss_before)
                 #losses["loss_da_consistency"] = self.cst_weight * da_consistency_loss_before
             return losses
         return {}

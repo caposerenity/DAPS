@@ -72,7 +72,7 @@ def main(args):
     # init source domian identity level centroid
     print("==> Initialize source-domain class centroids in the hybrid memory")
     sour_cluster_loader = build_cluster_loader(cfg,dataset_source_train)
-    sour_fea_dict = extract_dy_features(model, sour_cluster_loader, device, is_source=True)
+    sour_fea_dict = extract_dy_features(cfg, model, sour_cluster_loader, device, is_source=True)
     source_centers = [torch.cat(sour_fea_dict[pid],0).mean(0) for pid in sorted(sour_fea_dict.keys())]
     source_centers = torch.stack(source_centers,0)
     source_centers = F.normalize(source_centers, dim=1)
@@ -148,11 +148,11 @@ def main(args):
             dataset_target_train = build_dataset(cfg.INPUT.TDATASET, cfg.INPUT.TDATA_ROOT, transforms, "train", is_source=False)
             tgt_cluster_loader = build_cluster_loader(cfg,dataset_target_train)
             if epoch==target_start_epoch:
-                target_features, img_proposal_boxes, negative_fea, positive_fea = extract_dy_features(model, tgt_cluster_loader, device, is_source=False)
+                target_features, img_proposal_boxes, negative_fea, positive_fea = extract_dy_features(cfg, model, tgt_cluster_loader, device, is_source=False)
             else:
                 target_features = memory.features[source_classes:].data.cpu().clone()
                 #target_features = memory.features[source_classes:source_classes+len(sorted_keys)].data.cpu().clone()
-                target_features, img_proposal_boxes, negative_fea, positive_fea = extract_dy_features(model, tgt_cluster_loader, device, is_source=False, memory_proposal_boxes=img_proposal_boxes, memory_target_features=target_features)
+                target_features, img_proposal_boxes, negative_fea, positive_fea = extract_dy_features(cfg, model, tgt_cluster_loader, device, is_source=False, memory_proposal_boxes=img_proposal_boxes, memory_target_features=target_features)
             sorted_keys = sorted(target_features.keys())
             print("target_features instances :"+str(len(sorted_keys)))
             target_features = torch.cat([target_features[name] for name in sorted_keys], 0)
@@ -290,7 +290,7 @@ def main(args):
                     "epoch": epoch,
                     'amp': amp.state_dict()
                 },
-                osp.join(output_dir, f"gt_epoch_{epoch}.pth"),
+                osp.join(output_dir, f"epoch_{epoch}.pth"),
             )
 
     if tfboard:

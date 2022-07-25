@@ -118,7 +118,6 @@ class SeqRoIHeadsDa(RoIHeads):
                 proposals,     # type: List[Tensor]
                 image_shapes,  # type: List[Tuple[int, int]]
                 targets=None,   # type: Optional[List[Dict[str, Tensor]]]
-                is_source=True
                 ):
         # type: (...) -> Tuple[List[Dict[str, Tensor]], Dict[str, Tensor]]
         """
@@ -142,7 +141,7 @@ class SeqRoIHeadsDa(RoIHeads):
         boxes = [boxes_per_image.detach() for boxes_per_image in boxes]
         boxes, matched_idxs, labels, regression_targets, domain_labels,_ = self.select_training_samples_da(boxes, targets)
         box_features = self.box_roi_pool(features, boxes, image_shapes)
-        box_features = self.reid_head(box_features, is_source)
+        box_features = self.reid_head(box_features)
         box_embeddings, box_cls_scores = self.embedding_head(box_features)
 
         return box_embeddings, domain_labels, proposal_features["feat_res5"], domain_labels_before

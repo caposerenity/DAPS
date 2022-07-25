@@ -55,7 +55,7 @@ def extract_gt_features(model, data_loader, device, is_source):
     else:
         return tgt_fea
 
-def extract_dy_features(model, data_loader, device, is_source, memory_proposal_boxes=None, memory_target_features=None, momentum=0.2):
+def extract_dy_features(cfg, model, data_loader, device, is_source, memory_proposal_boxes=None, memory_target_features=None, momentum=0.2):
     model.eval()
     sour_fea_dict = collections.defaultdict(list)
     tgt_fea = OrderedDict()
@@ -103,7 +103,7 @@ def extract_dy_features(model, data_loader, device, is_source, memory_proposal_b
                     unqualified_nums+=1
                     continue
 
-                inds = (scores>=0.92)
+                inds = (scores>=cfg.EPS_P)
                 hard_inds = (scores>=0.8) ^ inds
                 all_embeddings = embeddings.clone()
                 hard_embeddings = embeddings[hard_inds]
@@ -161,7 +161,7 @@ def extract_dy_features(model, data_loader, device, is_source, memory_proposal_b
                 hard_negative = torch.ones(hard_embeddings.shape[0])
                 for j in range(hard_embeddings.shape[0]):
                     for k in range(len(img_proposal_boxes[img_name])):
-                        if _compute_iou(hard_boxes[j],img_proposal_boxes[img_name][k])>0.3:
+                        if _compute_iou(hard_boxes[j],img_proposal_boxes[img_name][k])>cfg.HM_THRESH:
                             hard_negative[j] = 0
                             break
                 hard_negative = (hard_negative>0)
