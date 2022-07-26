@@ -1,0 +1,10 @@
+OUTPUT_DIR: "/data/Projects_Data/SeqNet-DA/exp/exp_prw"
+INPUT:
+  DATASET: "PRW"
+  DATA_ROOT: "/data/PersonSearch/PRW"
+SOLVER:
+  MAX_EPOCHS: 18
+MODEL:
+  LOSS:
+    LUT_SIZE: 482
+    CQ_SIZE: 500

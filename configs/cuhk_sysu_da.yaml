@@ -1,0 +1,19 @@
+OUTPUT_DIR: "/dockerdata/tjunjieli/data/project_data/SeqNet-DA/exp/exp_cuhk_da"
+INPUT:
+  DATASET: "CUHK-SYSU"
+  TDATASET: "PRW"
+  DATA_ROOT: "/dockerdata/tjunjieli/data/CUHK-SYSU"
+  TDATA_ROOT: "/dockerdata/tjunjieli/data/PRW"
+  BATCH_SIZE_TRAIN: 4
+SOLVER:
+  MAX_EPOCHS: 20
+  LR_DECAY_MILESTONES: [16]
+  BASE_LR: 0.0024
+  LW_DA_INS: 0.98
+MODEL:
+  LOSS:
+    LUT_SIZE: 6015
+    CQ_SIZE: 5000
+EVAL_PERIOD: 2
+TARGET_REID_START: 8
+EPS_P: 0.98
