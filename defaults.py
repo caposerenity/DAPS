@@ -154,6 +154,8 @@ _C.TARGET_REID_START = 0
 
 _C.HM_THRESH = 0.5
 
+_C.EPS_P = 0.98
+
 _C.LOCAL_RANK = -1
 
 def get_default_cfg():
